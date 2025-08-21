@@ -1,0 +1,100 @@
+name: 'Secure Checkout'
+description: 'Drop-in replacement for actions/checkout@v5 with persist-credentials=false enforced'
+author: 'Your Org'
+
+inputs:
+  repository:
+    description: 'Repository name with owner. For example, actions/checkout'
+    default: ${{ github.repository }}
+  ref:
+    description: 'The branch, tag or SHA to checkout.'
+    default: ''
+  token:
+    description: 'Personal access token (PAT) used to fetch the repository'
+    default: ${{ github.token }}
+  ssh-key:
+    description: 'SSH key used to fetch the repository.'
+    default: ''
+  ssh-known-hosts:
+    description: 'Additional known hosts.'
+    default: ''
+  ssh-strict:
+    description: 'Perform strict host key checking'
+    default: true
+  ssh-user:
+    description: 'The user to use when connecting via SSH'
+    default: git
+  path:
+    description: 'Relative path under $GITHUB_WORKSPACE to place the repository'
+    default: ''
+  clean:
+    description: 'Run git clean + reset before fetching'
+    default: true
+  filter:
+    description: 'Partially clone with filter (overrides sparse-checkout)'
+    default: ''
+  sparse-checkout:
+    description: 'Sparse checkout patterns (newline-separated)'
+    default: ''
+  sparse-checkout-cone-mode:
+    description: 'Whether to use cone mode for sparse checkout'
+    default: true
+  fetch-depth:
+    description: 'Number of commits to fetch. 0 = all history'
+    default: 1
+  fetch-tags:
+    description: 'Whether to fetch tags'
+    default: false
+  show-progress:
+    description: 'Show git fetch progress'
+    default: true
+  lfs:
+    description: 'Whether to download Git-LFS files'
+    default: false
+  submodules:
+    description: 'Whether to checkout submodules: true/recursive'
+    default: 'false'
+  set-safe-directory:
+    description: 'Add repository path as safe.directory in global git config'
+    default: true
+  github-server-url:
+    description: 'GitHub server URL (defaults to the current instance)'
+    default: ''
+
+outputs:
+  ref:
+    description: 'The branch, tag or SHA that was checked out'
+    value: ${{ steps.checkout.outputs.ref }}
+  commit:
+    description: 'The commit SHA that was checked out'
+    value: ${{ steps.checkout.outputs.commit }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: checkout
+      name: Checkout repository (secure)
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
+        token: ${{ inputs.token }}
+        ssh-key: ${{ inputs.ssh-key }}
+        ssh-known-hosts: ${{ inputs.ssh-known-hosts }}
+        ssh-strict: ${{ inputs.ssh-strict }}
+        ssh-user: ${{ inputs.ssh-user }}
+        path: ${{ inputs.path }}
+        clean: ${{ inputs.clean }}
+        filter: ${{ inputs.filter }}
+        sparse-checkout: ${{ inputs.sparse-checkout }}
+        sparse-checkout-cone-mode: ${{ inputs.sparse-checkout-cone-mode }}
+        fetch-depth: ${{ inputs.fetch-depth }}
+        fetch-tags: ${{ inputs.fetch-tags }}
+        show-progress: ${{ inputs.show-progress }}
+        lfs: ${{ inputs.lfs }}
+        submodules: ${{ inputs.submodules }}
+        set-safe-directory: ${{ inputs.set-safe-directory }}
+        github-server-url: ${{ inputs.github-server-url }}
+
+        # 🔒 enforced
+        persist-credentials: false
