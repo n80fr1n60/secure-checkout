@@ -1,0 +1,10 @@
+# File: .github/dependabot.yml
+version: 2
+updates:
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "daily"
+  rebase-strategy: disabled
+  commit-message:
+      prefix: ":✈️:"
