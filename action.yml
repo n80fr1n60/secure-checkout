@@ -1,6 +1,6 @@
 name: 'Secure Checkout'
 description: 'Drop-in replacement for actions/checkout@v5 with persist-credentials=false enforced'
-author: 'Your Org'
+author: n80fr1n60
 
 inputs:
   repository:
