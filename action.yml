@@ -75,16 +75,22 @@ runs:
     - id: checkout
       name: Checkout repository (secure)
       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      with:
-        repository: ${{ inputs.repository }}
-        ref: ${{ inputs.ref }}
+     with:
+        # 🔒 Always checkout the repo + ref that triggered the workflow
+        repository: ${{ github.repository }}
+        ref: ${{ github.ref }}
+        # 🔒 enforced
+        persist-credentials: false
+
+        # force clean of directory
+        clean: true    
+        
         token: ${{ inputs.token }}
         ssh-key: ${{ inputs.ssh-key }}
         ssh-known-hosts: ${{ inputs.ssh-known-hosts }}
         ssh-strict: ${{ inputs.ssh-strict }}
         ssh-user: ${{ inputs.ssh-user }}
         path: ${{ inputs.path }}
-        clean: ${{ inputs.clean }}
         filter: ${{ inputs.filter }}
         sparse-checkout: ${{ inputs.sparse-checkout }}
         sparse-checkout-cone-mode: ${{ inputs.sparse-checkout-cone-mode }}
@@ -95,6 +101,3 @@ runs:
         submodules: ${{ inputs.submodules }}
         set-safe-directory: ${{ inputs.set-safe-directory }}
         github-server-url: ${{ inputs.github-server-url }}
-
-        # 🔒 enforced
-        persist-credentials: false
